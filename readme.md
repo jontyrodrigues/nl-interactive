@@ -16,9 +16,17 @@ pip install numpy scipy matplotlib tkinter
 
 ### Usage
 
+## Using Python
+
 ```
 python nl_interactive.py
 ```
+
+## As a standalone executable
+
+Use the executable in the dist folder called main.exe as any other executable. You can also use the executable in the dist folder called main.pyw to run the program without the console window.
+
+### How to use
 
 Once the GUI is open, you can add your data points in the first two columns, the first column is for the x values and the second is for the y. By default only two rows are added click add data points to add more rows, if you need to remove then click remove.
 
