@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from scipy.stats import linregress
-from tkinter import Tk, Button, Label, Entry, Frame, messagebox
+from tkinter import Tk, Button, Label, Entry, Frame, messagebox, filedialog
 
 
 # Function to calculate R-squared
@@ -12,7 +12,6 @@ def calculate_r_squared(y, y_fit):
     ss_residual = np.sum((y - y_fit) ** 2)
     r_squared = 1 - (ss_residual / ss_total)
     return r_squared
-
 
 # Function to fit the model to data and update the plot
 def fit_model():
@@ -58,19 +57,142 @@ def fit_model():
     label_r_squared.config(text="R-squared: {:.4f}".format(r_squared))
     label_p_value.config(text="p-value: {:.4f}".format(p_value))
 
-    # Add text annotations to the plot
-    ax.text(0.02, 0.95, "R-squared: {:.4f}".format(r_squared), transform=ax.transAxes, fontsize=10, verticalalignment='top')
-    ax.text(0.02, 0.9, "p-value: {:.4f}".format(p_value), transform=ax.transAxes, fontsize=10, verticalalignment='top')
-
     # Update predicted parameter values label
-    param_values = ", ".join("{}: {:.4f}".format(param, value) for param, value in zip(params, params))
+    param_values = ", ".join("{:.4f}".format(value) for value in params)
     label_params.config(text="Predicted Parameter Values: {}".format(param_values))
+
+    # Update the predicted parameter values in the entries
+    for entry_param_value, param_value in zip(entries_param_value, params):
+        entry_param_value.delete(0, "end")
+        entry_param_value.insert(0, param_value)
+    
 
     # Redraw the plot
     ax.relim()
     ax.autoscale_view()
     plt.draw()
 
+
+# Function to add data points from a file
+def add_data_points_from_file():
+    # Make an "Open" window appear and store the chosen file path as a string
+    file_path = filedialog.askopenfilename()
+
+    # If the user chose a file
+    if file_path:
+        # Clear the current data points
+        clear_data_points()
+        # Open the file in read mode
+        with open(file_path, "r", encoding="UTF-8") as file:
+            # Read the file contents and split them by newline
+            lines = file.read().split("\n")
+
+            # Add a data point for each line
+            for line in lines:
+                # Split the line by comma
+                x, y = line.split(",")
+
+                # Add a data point
+                add_data_point()
+
+                # Set the x and y values of the last data point
+                entries_x[-1].insert(0, x)
+                entries_y[-1].insert(0, y)
+
+# Function to save data points to a file
+def save_data_points_to_file():
+    # Make a "Save" window appear and store the chosen file path as a string
+    file_path = filedialog.asksaveasfilename()
+
+    # If the user chose a file
+    if file_path:
+        # Open the file in write mode
+        with open(file_path, "w",encoding="UTF-8") as file:
+            # Write each data point to the file
+            for point in points:
+                file.write("{},{}\n".format(point[0].get(), point[1].get()))
+
+
+
+# function to clear the current data points
+def clear_data_points():
+    # Remove all data points from the list
+    for point in points:
+        point[0].destroy()
+        point[1].destroy()
+
+    # Remove all data points from the list
+    points.clear()
+    entries_x.clear()
+    entries_y.clear()
+
+# Function to save the model to a file, so that it can be loaded later, without having to re-enter the formula
+# If the user has not entered a formula, an error message will be displayed
+def save_model():
+    # If the user has not entered a formula
+    if not entry_formula.get():
+        messagebox.showerror("Error", "Please enter a formula first")
+        return
+
+    # Make a "Save" window appear and store the chosen file path as a string
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")],initialfile="model.txt",initialdir="../models")
+
+    # If the user chose a file
+    if file_path:
+        # Open the file in write mode
+        with open(file_path, "w", encoding="UTF-8") as file:
+            # Write the formula to the file
+            file.write("{}\n".format(entry_formula.get()))
+
+            # Write the parameter names and values to the file
+            for param_name, param_value in zip(entries_param_name, entries_param_value):
+                file.write("{},{}\n".format(param_name.get(), param_value.get()))
+
+# Function to load a model from a file
+def load_model():
+    # Make an "Open" window appear and store the chosen file path as a string
+    file_path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")],initialdir="../models")
+
+    # If the user chose a file
+    if file_path:
+        # Clear the current parameter points
+        clear_param_points()
+
+        # Open the file in read mode
+        with open(file_path, "r", encoding="UTF-8") as file:
+            # Read the file contents and split them by newline
+            lines = file.read().split("\n")
+
+            # Set the formula
+            # Get the length of the formula
+            formula_length = len(entry_formula.get())
+            entry_formula.delete(0, formula_length)
+            entry_formula.insert(0, lines[0])
+
+            # Add a parameter point for each line
+            for line in lines[1:]:
+                # Split the line by comma
+                param_name, param_value = line.split(",")
+
+                # Add a parameter point
+                add_param_point()
+
+                # Set the name and value of the last parameter point
+                entries_param_name[-1].insert(0, param_name)
+                entries_param_value[-1].insert(0, param_value)
+
+# Function to clear the current parameter points
+def clear_param_points():
+    labels_param_name.pop().destroy()
+    entries_param_name.pop().destroy()
+    labels_param_value.pop().destroy()
+    entries_param_value.pop().destroy()
+    # Remove all parameter points from the list
+    for param_point in entries_param_value:
+        labels_param_name.pop().destroy()
+        entries_param_name.pop().destroy()
+        labels_param_value.pop().destroy()
+        entries_param_value.pop().destroy()
 
 # Function to add a new data point
 def add_data_point():
@@ -185,14 +307,26 @@ for i in range(2):
 
 # Create a label and entry box for the formula
 label_formula = Label(root, text="Formula: ")
-label_formula.grid(row=1, column=2, padx=5, pady=10, sticky="E")
+label_formula.grid(row=1, column=3, padx=5, pady=10, sticky="E")
 
 entry_formula = Entry(root)
-entry_formula.grid(row=1, column=3, padx=5, pady=10)
+entry_formula.grid(row=1, column=4, padx=5, pady=10)
+
+# Create a button to save the formula and parameters into a file
+save_model_button = Button(root, text="Save Model", command=save_model)
+save_model_button.grid(row=1, column=5, padx=5, pady=10)
+
+load_model_button = Button(root, text="Load Model", command=load_model)
+load_model_button.grid(row=1, column=6, padx=5, pady=10)
+
 
 # Create a button to fit the model
 fit_button = Button(root, text="Fit Model", command=fit_model)
-fit_button.grid(row=1, column=5, padx=5, pady=10)
+fit_button.grid(row=2, column=2, padx=5, pady=10)
+
+# Create a button to load the data from a csv file
+load_button = Button(root, text="Load Data", command=add_data_points_from_file)
+load_button.grid(row=1, column=2, padx=5, pady=10)
 
 # Create labels for R-squared, p-value, and predicted parameter values
 label_r_squared = Label(root, text="R-squared: ")

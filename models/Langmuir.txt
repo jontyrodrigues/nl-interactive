@@ -1,0 +1,3 @@
+(Qmax*Kl*x)/(1+(Kl*x))
+Qmax,100
+Kl,0.1
