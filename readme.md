@@ -36,6 +36,10 @@ Make sure that the parameter names in the model and the parameter names in the p
 
 Once you have added your model and parameters, click fit data. The fit will be displayed in the plot. If you need to change the model or parameters, then change them and click fit data again.
 
+Now you can also load your data from a csv file. Click load data, and select your csv file. The first two columns will be loaded into the data points table. If you need to remove the data points, click remove. If you need to add more data points, click add data points.
+
+You can also save your model and parameters to a file, the first row will be the model, and the second row onwards will be the parameters with the name in the first column and the initial value in the second. Click save model and parameters, and select the file you want to save to. To load the model and parameters, click load model and parameters, and select the file you want to load from.
+
 ## Example
 
 Say you have the a langmuir isotherm and you want to fit it to some data. The langmuir isotherm is given by:
