@@ -1,4 +1,4 @@
-## NL Interactive
+# NL Interactive
 
 A simple GUI interface for doing non-linear curve fitting.  This is a work in progress.
 
@@ -8,25 +8,25 @@ Well I am doing my PhD and i need to fit a lot of data, i have a lot of software
 
 Well mostly it is written by ChatGPT, the frontend part and the curve fitting part is written by me.
 
-### Installation
+## Installation
 
 ```
 pip install numpy scipy matplotlib tkinter
 ```
 
-### Usage
+## Usage
 
-## Using Python
+### Using Python
 
 ```
 python nl_interactive.py
 ```
 
-## As a standalone executable
+### As a standalone executable
 
 Use the executable in the dist folder called main.exe as any other executable. You can also use the executable in the dist folder called main.pyw to run the program without the console window.
 
-### How to use
+## How to use
 
 Once the GUI is open, you can add your data points in the first two columns, the first column is for the x values and the second is for the y. By default only two rows are added click add data points to add more rows, if you need to remove then click remove.
 
@@ -36,7 +36,7 @@ Make sure that the parameter names in the model and the parameter names in the p
 
 Once you have added your model and parameters, click fit data. The fit will be displayed in the plot. If you need to change the model or parameters, then change them and click fit data again.
 
-### Example
+## Example
 
 Say you have the a langmuir isotherm and you want to fit it to some data. The langmuir isotherm is given by:
 
