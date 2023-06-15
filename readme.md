@@ -48,6 +48,8 @@ You can also generate an html report of your fit. Click generate report, this wi
 
 If you are having a hard time fitting your data, you can also to brute force fitting. Click brute force params, this will try to fit your data with all the possible combinations of the parameters, in the dataset. Needs more work.
 
+You will now also be able to add your x-label and y-label
+
 ## Example
 
 Say you have the a langmuir isotherm and you want to fit it to some data. The langmuir isotherm is given by:
