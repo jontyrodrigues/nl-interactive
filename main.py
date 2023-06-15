@@ -12,7 +12,7 @@ from tkinter import Tk, Button, Label, Entry, Frame, messagebox, filedialog
 # Function to fit the model to data and update the plot
 def fit_model():
     # Create a figure and plot
-    fig = plt.figure()
+    fig = plt.figure(dpi=150)
     ax = fig.add_subplot(111)
     line, = ax.plot([], [], 'r-', label='Fitted Curve')
     scatter, = ax.plot([], [], 'bo', label='Data Points')
@@ -220,8 +220,8 @@ def add_data_points_from_file():
             # Read the file contents and split them by newline
             lines = file.read().split("\n")
 
-            # If the first line does contain does not contain a interger or a float, then it is the header
-            if not isinstance(lines[0].split(",")[0], (int, float)):
+            # If the first line contains anything other than a number, or dot then it is the header
+            if not re.match(r"^\d+\.?\d*$", lines[0].split(",")[0]) or not re.match(r"^\d+\.?\d*$", lines[0].split(",")[1]):
                 # Add the x and y axis labels
                 x_axis_label.insert(0, lines[0].split(",")[0])
                 y_axis_label.insert(0, lines[0].split(",")[1])
@@ -257,6 +257,9 @@ def save_data_points_to_file():
 
 # function to clear the current data points
 def clear_data_points():
+    # Remove the x-label and y-labels
+    x_axis_label.delete(0,"end")
+    y_axis_label.delete(0,"end")
     # Remove all data points from the list
     for point in points:
         point[0].destroy()
