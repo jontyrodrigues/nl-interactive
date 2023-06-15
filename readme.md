@@ -36,9 +36,17 @@ Make sure that the parameter names in the model and the parameter names in the p
 
 Once you have added your model and parameters, click fit data. The fit will be displayed in the plot. If you need to change the model or parameters, then change them and click fit data again.
 
+#### Update 0.2.1
 Now you can also load your data from a csv file. Click load data, and select your csv file. The first two columns will be loaded into the data points table. If you need to remove the data points, click remove. If you need to add more data points, click add data points.
 
 You can also save your model and parameters to a file, the first row will be the model, and the second row onwards will be the parameters with the name in the first column and the initial value in the second. Click save model and parameters, and select the file you want to save to. To load the model and parameters, click load model and parameters, and select the file you want to load from.
+
+#### Update 0.3.1
+Now you can also save your data points to a csv file. Click save data, and select the file you want to save to.
+
+You can also generate an html report of your fit. Click generate report, this will automatically generate a report.html file in the same folder and open it in the default browser. 
+
+If you are having a hard time fitting your data, you can also to brute force fitting. Click brute force params, this will try to fit your data with all the possible combinations of the parameters, in the dataset. Needs more work.
 
 ## Example
 
